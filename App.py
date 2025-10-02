@@ -1,3 +1,5 @@
+''' File for handling streamlit and main app functionality '''
+
 ## Imports
 import streamlit as st
 import time
@@ -19,7 +21,7 @@ st.set_page_config(
 
 ## Initialize session state
 if "data" not in st.session_state:
-    # Store last 2oo data points
+    # Store last 200 data points
     st.session_state.data = deque(maxlen=200)
     st.session_state.timestamps = deque(maxlen=200)
     st.session_state.anomalies = deque(maxlen=200)
@@ -86,7 +88,9 @@ def detect_anomaly(data, method, **params):
     # List of different detection methods
     detectors = {
         "Z-score": lambda: ad.z_score(list(data), params.get('threshold', 3)),
-        "InterQuartile Range": lambda: ad.iqr(list(data), params.get('multiplier', 1.5))
+        "InterQuartile Range": lambda: ad.iqr(list(data), params.get('multiplier', 1.5)),
+        "Rolling Z-score": lambda: ad.rolling_z_score(list(data), params.get('window', 20), params.get('threshold', 2)),
+        "Grubbs' Test": lambda: ad.grubbs_test(list(data), params.get('alpha', 0.05))
     }
 
     return detectors[method]()
@@ -104,7 +108,7 @@ data_type = st.sidebar.selectbox(
 ## Drop down menu for picking anomaly detection method
 detection_method = st.sidebar.selectbox(
     "Detection Method",
-    ["Z-score", "InterQuartile Range"],
+    ["Z-score", "InterQuartile Range", "Rolling Z-score", "Grubbs' Test"],
     help="Select an Anomaly Detection method"
 )
 
@@ -112,12 +116,30 @@ detection_method = st.sidebar.selectbox(
 st.sidebar.subheader("Algorithm Parameters")
 params = {}
 
-## Checks which detection method is being used
-if (detection_method == "Z-score"):
-    params['threshold'] = st.sidebar.slider("Z-score Threshold", 1.0, 5.0, 2.5, 1.0)
+# ## Checks which detection method is being used
+# if (detection_method == "Z-score"):
+#     params['threshold'] = st.sidebar.slider("Z-score Threshold", 1.0, 5.0, 2.0, 1.0)
 
-elif (detection_method == "InterQuartile Range"):
-    params['multiplier'] = st.sidebar.slider("IQR Multiplier", 1.0, 3.0, 1.5, 0.1)
+# elif (detection_method == "InterQuartile Range"):
+#     params['multiplier'] = st.sidebar.slider("IQR Multiplier", 1.0, 3.0, 2.0, 0.1)
+
+# elif (detection_method == "Grubbs' Test"):
+#     params['alpha'] = st.sidebar.slider("Grubbs' Test Alpha", 0.01, 0.3, 0.05, 0.01)
+
+# elif (detection_method == "Rolling Z-score"):
+#     params['window'] = st.sidebar.slider("Rolling Z-score Window", 1, 50, 25, 5)
+#     params['threshold'] = st.sidebar.slider("Rolling Z-score Threshold", 1.0, 5.0, 3.0, 1.0)
+
+match detection_method:
+    case "Z-score":
+        params['threshold'] = st.sidebar.slider("Z-score Threshold", 1.0, 5.0, 2.0, 1.0)
+    case "InterQuartile Range":
+        params['multiplier'] = st.sidebar.slider("IQR Multiplier", 1.0, 3.0, 2.0, 0.1)
+    case "Rolling Z-score":
+        params['window'] = st.sidebar.slider("Rolling Z-score Window", 5, 50, 25, 5)
+        params['threshold'] = st.sidebar.slider("Rolling Z-score Threshold", 1.0, 5.0, 3.0, 1.0)
+    case "Grubbs' Test":
+        params['alpha'] = st.sidebar.slider("Grubbs' Test Alpha", 0.01, 0.3, 0.05, 0.01)
 
 # Speed at which points are generated
 update_speed = st.sidebar.slider("Update Speed", 1, 10, 5)      
