@@ -26,10 +26,6 @@
 }
 
 /* --- Button Styling --- */
-[data-testid="stSidebar"] .stButton {
-    width: 100% !important;
-}
-
 [data-testid="stSidebar"] .stButton > button {
     background-color: #1a1d29 !important;
     color: #FFFFF0 !important;
@@ -46,6 +42,13 @@
 [data-testid="stSidebar"] .stButton > button:hover {
     background-color: #ff4b4b !important;
     transform: translateY(-1px);
+}
+
+[data-testid="stSidebar"] .stButton,
+[data-testid="stSidebar"] .stButton > div,
+[data-testid="stSidebar"] [data-testid="column"],
+[data-testid="stSidebar"] [data-testid="column"] > div {
+    width: 100% !important;
 }
 
 /* --- X Button Styling  --- */
