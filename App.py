@@ -20,7 +20,8 @@ st.set_page_config(
 ## Import CSS
 def load_css(file_name):
     with open(file_name) as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+        css = f"<style>div[data-testid='stAppViewContainer'] {{{f.read()}}}</style>"
+        st.markdown(css, unsafe_allow_html=True)
 load_css("style.css")
 
 ## Initialize session state
@@ -77,9 +78,8 @@ match detection_method:
 update_speed = st.sidebar.slider("Update Speed", 1, 10, 5)      
 
 ## Button layout
-col1, col2 = st.sidebar.columns(2)
-start_button = col1.button("Start")
-stop_button = col2.button("Stop")
+start_button = st.sidebar.button("Start")
+stop_button = st.sidebar.button("Stop")
 reset_button = st.sidebar.button("Reset")
 
 ## Button logic
@@ -116,7 +116,7 @@ metric_placeholder = st.empty()
 chart_placeholder = st.empty()
 
 ## Streaming loop
-while st.session_state.is_running:
+if st.session_state.is_running:
     # Generate value with timestamp
     t = st.session_state.data_points
     value = dg.generate_data_point(data_type, t)
@@ -158,6 +158,7 @@ while st.session_state.is_running:
 
     # Rerun loop
     time.sleep(1 / update_speed)
+    st.rerun()
 
 else:
     # Show current paused data state
