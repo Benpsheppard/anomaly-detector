@@ -5,7 +5,6 @@ import streamlit as st
 import time
 from datetime import datetime
 from collections import deque
-import plotly.graph_objects as go
 
 # Import files
 import AnomalyDetectors as ad
