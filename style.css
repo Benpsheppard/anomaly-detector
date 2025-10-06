@@ -26,6 +26,10 @@
 }
 
 /* --- Button Styling --- */
+[data-testid="stSidebar"] .stButton {
+    width: 100% !important;
+}
+
 [data-testid="stSidebar"] .stButton > button {
     background-color: #1a1d29 !important;
     color: #FFFFF0 !important;
