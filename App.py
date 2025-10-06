@@ -78,10 +78,33 @@ match detection_method:
 # Speed at which points are generated
 update_speed = st.sidebar.slider("Update Speed", 1, 10, 5)      
 
-## Button layout
-start_button = st.sidebar.button("Start")
-stop_button = st.sidebar.button("Stop")
-reset_button = st.sidebar.button("Reset")
+## Button layout with custom styling
+st.sidebar.markdown("""
+<style>
+.full-width-button {
+    width: 100%;
+    display: block;
+}
+.full-width-button button {
+    width: 100% !important;
+    background-color: #1a1d29 !important;
+    color: #FFFFF0 !important;
+    border: 3px solid #ff4b4b !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+}
+.full-width-button button:hover {
+    background-color: #ff4b4b !important;
+    transform: translateY(-1px);
+}
+</style>
+""", unsafe_allow_html=True)
+
+start_button = st.sidebar.button("Start", use_container_width=True)
+stop_button = st.sidebar.button("Stop", use_container_width=True)
+reset_button = st.sidebar.button("Reset", use_container_width=True)
 
 ## Button logic
 if start_button:
