@@ -25,30 +25,30 @@
     font-size: 22px;
 }
 
-/* --- Button Styling --- */
-[data-testid="stSidebar"] .stButton > button {
+
+/* --- Sidebar Button Styling --- */
+[data-testid="stSidebar"] button[data-testid^="baseButton"] {
     background-color: #1a1d29 !important;
     color: #FFFFF0 !important;
     border: 3px solid #ff4b4b !important;
     border-radius: 8px !important;
-    padding: 8px 12px !important;
+    padding: 10px 14px !important;
     font-weight: 600 !important;
     transition: all 0.2s ease !important;
     width: 100% !important;
     text-align: center !important;
+    display: block !important;
 }
 
-[data-testid="stSidebar"] .stButton > button:hover {
+[data-testid="stSidebar"] button[data-testid^="baseButton"]:hover {
     background-color: #ff4b4b !important;
     transform: translateY(-1px);
 }
 
-/* --- X Button Styling  --- */
+/* --- X Button Styling --- */
 button[aria-label="Close sidebar"] {
-    border: none !important;
-    background: none !important;
-    color: inherit !important;
-    font-family: inherit !important;
+    all: unset !important;
+    cursor: pointer;
 }
 
 /* --- Select Boxes and Sliders --- */
