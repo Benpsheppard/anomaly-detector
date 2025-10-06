@@ -3,8 +3,6 @@
 ## Imports
 import streamlit as st
 import time
-import numpy as np
-import random
 from datetime import datetime
 from collections import deque
 import plotly.graph_objects as go
@@ -12,12 +10,19 @@ import plotly.graph_objects as go
 # Import files
 import AnomalyDetectors as ad
 import DataGenerators as dg
+import Chart as ch
 
 ## Page config
 st.set_page_config(
     page_title="Anomaly Detector", 
     layout="wide"
 )
+
+## Import CSS
+def load_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+load_css("style.css")
 
 ## Initialize session state
 if "data" not in st.session_state:
@@ -36,72 +41,13 @@ if "data" not in st.session_state:
     # When streaming started
     st.session_state.start_time = datetime.now()
 
-## Create chart
-def create_chart(data, timestamps, anomalies):
-    fig = go.Figure()
-
-    # Line
-    fig.add_trace(go.Scatter(
-        x=timestamps, y=data,
-        mode="lines+markers",
-        line=dict(color="white"),
-        marker=dict(size=6, color="white"),
-        name="Data"
-    ))
-
-    # Anomalies
-    anomaly_indices = [i for i, a in enumerate(anomalies) if a]
-    if anomaly_indices:
-        fig.add_trace(go.Scatter(
-            x=[timestamps[i] for i in anomaly_indices],
-            y=[data[i] for i in anomaly_indices],
-            mode="markers",
-            marker=dict(size=12, color="red", symbol="x"),
-            name="Anomaly"
-        ))
-
-    fig.update_layout(
-        title="Anomaly Detection",
-        xaxis_title="Time",
-        yaxis_title="Value",
-        template="plotly_dark",
-        height=500
-    )
-    return fig
-
-## Generate data point
-def generate_data_point(data_type):
-
-    # List of different generator types
-    generators = {
-        "Stock Price": lambda: dg.stock_price(),
-        "Temperature Readings": lambda: dg.temp_sensor_readings()
-    }
-
-    value = generators[data_type]()
-
-    return value
-
-## Check for anomaly
-def detect_anomaly(data, method, **params):
-
-    # List of different detection methods
-    detectors = {
-        "Z-score": lambda: ad.z_score(list(data), params.get('threshold', 3)),
-        "InterQuartile Range": lambda: ad.iqr(list(data), params.get('multiplier', 1.5)),
-        "Rolling Z-score": lambda: ad.rolling_z_score(list(data), params.get('window', 20), params.get('threshold', 2)),
-        "Grubbs' Test": lambda: ad.grubbs_test(list(data), params.get('alpha', 0.05))
-    }
-
-    return detectors[method]()
-
 ## Sidebar controls and layout
 st.sidebar.title("Controls")
 
 ## Drop down menu for picking data generation type
 data_type = st.sidebar.selectbox(
     "Data Generator", 
-    ["Stock Price", "Temperature Readings"], 
+    ["Stock Price", "Temperature Readings", "Network Traffic", "Sinusoidal Wave"], 
     help="Select the type of data to generate"
 )
 
@@ -116,20 +62,7 @@ detection_method = st.sidebar.selectbox(
 st.sidebar.subheader("Algorithm Parameters")
 params = {}
 
-# ## Checks which detection method is being used
-# if (detection_method == "Z-score"):
-#     params['threshold'] = st.sidebar.slider("Z-score Threshold", 1.0, 5.0, 2.0, 1.0)
-
-# elif (detection_method == "InterQuartile Range"):
-#     params['multiplier'] = st.sidebar.slider("IQR Multiplier", 1.0, 3.0, 2.0, 0.1)
-
-# elif (detection_method == "Grubbs' Test"):
-#     params['alpha'] = st.sidebar.slider("Grubbs' Test Alpha", 0.01, 0.3, 0.05, 0.01)
-
-# elif (detection_method == "Rolling Z-score"):
-#     params['window'] = st.sidebar.slider("Rolling Z-score Window", 1, 50, 25, 5)
-#     params['threshold'] = st.sidebar.slider("Rolling Z-score Threshold", 1.0, 5.0, 3.0, 1.0)
-
+# Get detector specific parameters
 match detection_method:
     case "Z-score":
         params['threshold'] = st.sidebar.slider("Z-score Threshold", 1.0, 5.0, 2.0, 1.0)
@@ -162,23 +95,32 @@ if reset_button:
     st.session_state.data_points = 0
     st.session_state.anomaly_count = 0
     st.session_state.start_time = datetime.now()
+    st.session_state.is_running = False
     st.rerun()
 
-## Show Metrics
-col1, col2, col3 = st.columns(3)
-col1.metric("Data Points", st.session_state.data_points)
-col2.metric("Anomalies", st.session_state.anomaly_count)
-rate = (st.session_state.anomaly_count / st.session_state.data_points * 100) if st.session_state.data_points > 0 else 0
-col3.metric("Anomaly Rate", f"{rate:.2f}%")
+## Main app layout
+st.title("Real-Time Anomaly Detection Simulation")
+st.markdown("""
+            <div>
+                <p style="font-size:16px;">Simulate streaming data and detect anomalies using various algorithms.</p>
+            </div>
+            """, unsafe_allow_html=True)
 
-# Chart Placeholder
+# System status
+if st.session_state.is_running:
+    st.success("System Status: Running - Generating data in real-time")
+else:
+    st.info("System Status: Paused - Click 'Start' to begin generating data")
+
+# Updated Placeholders
+metric_placeholder = st.empty()
 chart_placeholder = st.empty()
 
 ## Streaming loop
-if st.session_state.is_running:
-
+while st.session_state.is_running:
     # Generate value with timestamp
-    value = generate_data_point(data_type)
+    t = st.session_state.data_points
+    value = dg.generate_data_point(data_type, t)
     current_time = datetime.now()
 
     # Add value to session data
@@ -189,7 +131,7 @@ if st.session_state.is_running:
     # Detect Anomaly
     is_anomaly = False
     if len(st.session_state.data) > 10:
-        is_anomaly = detect_anomaly(st.session_state.data, detection_method, **params) 
+        is_anomaly = ad.detect_anomaly(st.session_state.data, detection_method, **params) 
 
     # Add anomaly to list and increase anomaly counter
     st.session_state.anomalies.append(is_anomaly)
@@ -197,25 +139,35 @@ if st.session_state.is_running:
         st.session_state.anomaly_count += 1
         st.toast(f"Anomaly detected! Value: {value:.2f} at {current_time.strftime('%H:%M:%S')}")
 
+    # Update Metrics
+    with metric_placeholder.container():
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("Data Points", st.session_state.data_points)
+        col2.metric("Anomalies", st.session_state.anomaly_count)
+        rate = (st.session_state.anomaly_count / st.session_state.data_points * 100) if st.session_state.data_points > 0 else 0
+        col3.metric("Anomaly Rate", f"{rate:.2f}%")
+        col4.metric("Elapsed Time", (datetime.now() - st.session_state.start_time).seconds)
+
     # Update chart with data and put in placeholder
-    fig = create_chart(
+    fig = ch.create_chart(
         list(st.session_state.data),
         list(st.session_state.timestamps),
-        list(st.session_state.anomalies)
+        list(st.session_state.anomalies),
+        data_type
     )
     chart_placeholder.plotly_chart(fig, use_container_width=True)
 
     # Rerun loop
     time.sleep(1 / update_speed)
-    st.rerun()
 
 else:
     # Show current paused data state
     if st.session_state.data:
-        fig = create_chart(
+        fig = ch.create_chart(
             list(st.session_state.data),
             list(st.session_state.timestamps),
-            list(st.session_state.anomalies)
+            list(st.session_state.anomalies),
+            data_type
         )
         chart_placeholder.plotly_chart(fig, use_container_width=True)
     else:
