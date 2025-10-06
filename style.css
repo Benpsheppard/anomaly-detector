@@ -1,62 +1,65 @@
-/* === Sidebar base === */
+* {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* === Sidebar Styling === */
 [data-testid="stSidebar"] {
     background-color: #1a1d29;
     color: #FFFFF0;
     padding-top: 20px;
     border-right: 1px solid #333;
-    box-sizing: border-box;
 }
 
-/* scope app text only to main container (DO NOT override Streamlit internals) */
-[data-testid="stAppViewContainer"] p,
-[data-testid="stAppViewContainer"] div,
-[data-testid="stAppViewContainer"] span {
-    font-family: 'Segoe UI', sans-serif;
+/* Sidebar Text */
+[data-testid="stSidebar"] * {
+    color: #FFFFF0;
+    font-size: 16px;
 }
 
-/* === BUTTONS: matching multiple Streamlit DOM variants === */
-/* Variant: old .stButton > button */
-[data-testid="stSidebar"] .stButton > button,
- /* Variant: new baseButton data-testids */
-[data-testid="stSidebar"] button[data-testid^="baseButton"],
- /* Generic fallback */
-[data-testid="stSidebar"] aside button,
-[data-testid="stSidebar"] div button {
+/* Sidebar Titles and Headers */
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3 {
+    color: #ff4b4b;
+    font-weight: 600;
+    font-size: 22px;
+}
+
+/* --- Button Styling --- */
+[data-testid="stSidebar"] .stButton > button {
     background-color: #1a1d29 !important;
     color: #FFFFF0 !important;
     border: 3px solid #ff4b4b !important;
     border-radius: 8px !important;
-    padding: 10px 14px !important;
+    padding: 8px 12px !important;
     font-weight: 600 !important;
-    transition: all 0.15s ease !important;
+    transition: all 0.2s ease !important;
     width: 100% !important;
-    display: block !important;
-    box-sizing: border-box !important;
     text-align: center !important;
-    margin: 6px 0 !important;
+    display: block !important;
 }
 
-/* Hover */
-[data-testid="stSidebar"] button[data-testid^="baseButton"]:hover,
 [data-testid="stSidebar"] .stButton > button:hover {
     background-color: #ff4b4b !important;
     transform: translateY(-1px);
 }
 
-/* === Sidebar Close (X) fix === */
-/* Reset only styles that could break the icon font — avoid global font overrides */
-button[aria-label="Close sidebar"],
-button[aria-label="Close sidebar"] > span {
-    background: none !important;
+/* --- X Button Styling  --- */
+button[aria-label="Close sidebar"] {
     border: none !important;
+    background: none !important;
     color: inherit !important;
-    font-family: initial !important;    /* restore icon font fallback */
-    font-size: inherit !important;
+    font-family: inherit !important;
 }
 
-/* === Small extras to avoid layout overflow === */
-[data-testid="stSidebar"] .stSelectbox,
+/* --- Select Boxes and Sliders --- */
+[data-testid="stSidebar"] .stSelectbox, 
 [data-testid="stSidebar"] .stSlider {
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* === App title and text === */
+h1 {
+    color: #ff4b4b !important;
 }
