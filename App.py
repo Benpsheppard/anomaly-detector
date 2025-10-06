@@ -81,11 +81,7 @@ update_speed = st.sidebar.slider("Update Speed", 1, 10, 5)
 ## Button layout with custom styling
 st.sidebar.markdown("""
 <style>
-.full-width-button {
-    width: 100%;
-    display: block;
-}
-.full-width-button button {
+[data-testid="stSidebar"] .stButton > button {
     width: 100% !important;
     background-color: #1a1d29 !important;
     color: #FFFFF0 !important;
@@ -94,8 +90,11 @@ st.sidebar.markdown("""
     padding: 8px 12px !important;
     font-weight: 600 !important;
     transition: all 0.2s ease !important;
+    display: block !important;
+    text-align: center !important;
 }
-.full-width-button button:hover {
+
+[data-testid="stSidebar"] .stButton > button:hover {
     background-color: #ff4b4b !important;
     transform: translateY(-1px);
 }
