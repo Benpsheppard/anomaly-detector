@@ -1,3 +1,7 @@
+* {
+    font-family: 'Segoe UI', sans-serif;
+}
+
 /* === Sidebar Styling === */
 [data-testid="stSidebar"] {
     background-color: #1a1d29;
@@ -8,8 +12,7 @@
 
 /* Sidebar Text */
 [data-testid="stSidebar"] * {
-    color: #f0f0f0;
-    font-family: 'Segoe UI', sans-serif;
+    color: #FFFFF0;
     font-size: 16px;
 }
 
@@ -19,12 +22,13 @@
 [data-testid="stSidebar"] h3 {
     color: #ff4b4b;
     font-weight: 600;
+    font-size: 22px;
 }
 
 /* --- Button Styling --- */
-[data-testid="stSidebar"] div.stButton > button {
+[data-testid="stSidebar"] .stButton > button {
     background-color: #1a1d29 !important;
-    color: white !important;
+    color: #FFFFF0 !important;
     border: 3px solid #ff4b4b !important;
     border-radius: 8px !important;
     padding: 8px 12px !important;
@@ -34,7 +38,7 @@
     text-align: center !important;
 }
 
-[data-testid="stSidebar"] div.stButton > button:hover {
+[data-testid="stSidebar"] .stButton > button:hover {
     background-color: #ff4b4b !important;
     transform: translateY(-1px);
 }
@@ -57,8 +61,4 @@ button[aria-label="Close sidebar"] {
 /* === App title and text === */
 h1 {
     color: #ff4b4b !important;
-}
-
-p {
-    font-family: 'Segoe UI', sans-serif;
 }

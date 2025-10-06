@@ -20,8 +20,9 @@ st.set_page_config(
 ## Import CSS
 def load_css(file_name):
     with open(file_name) as f:
-        css = f"<style>div[data-testid='stAppViewContainer'] {{{f.read()}}}</style>"
-        st.markdown(css, unsafe_allow_html=True)
+        css = f.read()
+    st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
+    st.markdown(f"<!-- cachebuster: {time.time()} -->", unsafe_allow_html=True)
 load_css("style.css")
 
 ## Initialize session state
