@@ -21,32 +21,33 @@
     font-weight: 600;
 }
 
-/* Button Styling */
-[data-testid="stSidebar"] button[kind="secondary"],
-[data-testid="stSidebar"] button[kind="primary"] {
-    background-color: #1a1d29;
-    color: white;
-    border: 3px solid #ff4b4b;
-    border-radius: 8px;
-    padding: 8px 12px;
-    font-weight: 600;
-    transition: all 0.2s ease;
-    width: 100%;
+/* --- Button Styling --- */
+[data-testid="stSidebar"] div.stButton > button {
+    background-color: #1a1d29 !important;
+    color: white !important;
+    border: 3px solid #ff4b4b !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+    width: 100% !important;
+    text-align: center !important;
 }
 
-[data-testid="stSidebar"] button[kind="secondary"]:hover,
-[data-testid="stSidebar"] button[kind="primary"]:hover {
-    background-color: #ff4b4b;
+[data-testid="stSidebar"] div.stButton > button:hover {
+    background-color: #ff4b4b !important;
     transform: translateY(-1px);
 }
 
-/* X Button Styling */
+/* --- X Button Styling  --- */
 button[aria-label="Close sidebar"] {
     border: none !important;
     background: none !important;
+    color: inherit !important;
+    font-family: inherit !important;
 }
 
-/* Select Boxes and Sliders */
+/* --- Select Boxes and Sliders --- */
 [data-testid="stSidebar"] .stSelectbox, 
 [data-testid="stSidebar"] .stSlider {
     margin-top: 10px;
@@ -58,6 +59,6 @@ h1 {
     color: #ff4b4b !important;
 }
 
-p, div, span {
+p {
     font-family: 'Segoe UI', sans-serif;
 }
