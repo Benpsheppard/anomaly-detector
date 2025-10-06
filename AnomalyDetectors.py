@@ -92,3 +92,20 @@ def grubbs_test(data, alpha=0.05):
 
     return (max_diff_idx == (n - 1)) and (G > G_crit)     # Return true if last point was an anomaly
 
+'''
+Detect anomaly in data using specified method
+
+@param1 data: Data to be classified
+@param2 method: Anomaly detection method to use
+@param3 params: Additional parameters for specific methods (** to allow variable number of params)
+'''
+def detect_anomaly(data, method, **params):
+    # List of different detection methods
+    detectors = {
+        "Z-score": lambda: z_score(list(data), params.get('threshold', 3)),
+        "InterQuartile Range": lambda: iqr(list(data), params.get('multiplier', 1.5)),
+        "Rolling Z-score": lambda: rolling_z_score(list(data), params.get('window', 20), params.get('threshold', 2)),
+        "Grubbs' Test": lambda: grubbs_test(list(data), params.get('alpha', 0.05))
+    }
+
+    return detectors[method]()
