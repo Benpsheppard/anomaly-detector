@@ -2,7 +2,7 @@
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* === Sidebar Styling === */
+/* Sidebar Styling */
 [data-testid="stSidebar"] {
     background-color: #1a1d29;
     color: #FFFFF0;
@@ -25,48 +25,14 @@
     font-size: 22px;
 }
 
-/* --- Button Styling --- */
-[data-testid="stSidebar"] .stButton > button {
-    background-color: #1a1d29 !important;
-    color: #FFFFF0 !important;
-    border: 3px solid #ff4b4b !important;
-    border-radius: 8px !important;
-    padding: 8px 12px !important;
-    font-weight: 600 !important;
-    transition: all 0.2s ease !important;
-    width: 100% !important;
-    text-align: center !important;
-    display: block !important;
-}
-
-[data-testid="stSidebar"] .stButton > button:hover {
-    background-color: #ff4b4b !important;
-    transform: translateY(-1px);
-}
-
-[data-testid="stSidebar"] .stButton,
-[data-testid="stSidebar"] .stButton > div,
-[data-testid="stSidebar"] [data-testid="column"],
-[data-testid="stSidebar"] [data-testid="column"] > div {
-    width: 100% !important;
-}
-
-/* --- X Button Styling  --- */
-button[aria-label="Close sidebar"] {
-    border: none !important;
-    background: none !important;
-    color: inherit !important;
-    font-family: inherit !important;
-}
-
-/* --- Select Boxes and Sliders --- */
+/* Select Boxes and Sliders */
 [data-testid="stSidebar"] .stSelectbox, 
 [data-testid="stSidebar"] .stSlider {
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-/* === App title and text === */
+/* App title and text */
 h1 {
     color: #ff4b4b !important;
 }
