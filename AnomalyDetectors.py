@@ -82,9 +82,9 @@ def grubbs_test(data, alpha=0.05):
     if std == 0:        # Ensure std isn't 0 to avoid division by 0
         return False
 
-    diffs = np.abs(list(data) - mean)     # Calculate differences between each value and the mean
-    max_diff_idx = np.max(diffs)        # Find biggest difference
-    G = diffs[max_diff_idx] / std   # Grubbs statistic
+    diffs = np.abs(np.array(data) - mean)       # Calculate absolute differences from mean
+    max_diff_idx = np.argmax(diffs)     # Index of max difference
+    G = diffs[max_diff_idx] / std       # Grubbs' statistic
 
     # Critical value
     t_crit = t.ppf(1 - alpha / (2 * n), n - 2)
