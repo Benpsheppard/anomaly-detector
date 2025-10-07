@@ -49,6 +49,20 @@ def create_chart(data, timestamps, anomalies, data_type):
             name="Anomaly"
         ))
 
+    import numpy as np
+
+    # Rolling mean line
+    window = 10
+    if len(data_list) > window:
+        rolling_mean = np.convolve(data_list, np.ones(window)/window, mode='valid')
+        fig.add_trace(go.Scatter(
+            x=timestamps_list[window-1:], 
+            y=rolling_mean, 
+            mode="lines",
+            line=dict(color="rgba(0, 255, 255, 0.3)", width=1.2),
+            name="Rolling Mean"
+        ))
+
     # Chart layout
     fig.update_layout(
         # Title Styling
