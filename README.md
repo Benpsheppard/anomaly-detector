@@ -7,6 +7,13 @@ A real-time anomaly detection web app built in Python using Streamlit. It contin
  - Chart displaying data in real-time
  - Anomalies detected and presented to the user in real-time
 
+## App Preview
+
+<p align="center">
+  <img src="img/anomaly-detector.png" width="800">
+</p>
+*Live chart showing real-time data streaming and anomaly detection using Z-score.*
+
 ## Installation
 Clone the repo:
 ```bash
